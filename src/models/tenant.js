@@ -1,7 +1,8 @@
 export default (sequelize, DataTypes) => {
-    const Tenant = sequelize.define('User', {
+    const Tenant = sequelize.define('Tenant', {
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            unique: true
         }
     });
 
@@ -9,5 +10,5 @@ export default (sequelize, DataTypes) => {
         Tenant.hasMany(db.User);
     };
 
-    return User;
+    return Tenant;
 };

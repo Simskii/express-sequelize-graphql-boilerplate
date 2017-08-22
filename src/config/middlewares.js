@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -23,15 +24,6 @@ export default app => {
         app.use(morgan('dev'));
     }
 
-    app.use(async (req, res, next) => {
-        const token = req.headers.authorization;
-        if (token != null) {
-            const user = await jwt.verify(token, config.JWT_SECRET);
-            req.user = user; //eslint-disable-line
-        } else {
-            req.user = null; //eslint-disable-line
-        }
-        next();
-    });
+    app.use(passport.initialize());
 };
 

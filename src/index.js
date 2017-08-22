@@ -10,6 +10,13 @@ import middlewares from './config/middlewares';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
 
+import loginServices from './services/login.services';
+
+import {
+    authLocal,
+    authJwt,
+} from './services/auth.services';
+
 const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -17,6 +24,7 @@ const schema = makeExecutableSchema({
 
 const app = express();
 middlewares(app);
+loginServices(app);
 
 app.use(
     '/graphiql',
@@ -27,6 +35,7 @@ app.use(
 
 app.use(
     config.GRAPHQL_PATH,
+    authJwt,
     graphqlExpress(req => ({
         schema,
         context: {
@@ -39,7 +48,7 @@ app.use(
 
 const graphQLServer = createServer(app);
 
-models.sequelize.sync().then(() => {
+models.sequelize.sync({ force: true }).then(() => {
     graphQLServer.listen(config.PORT, err => {
         if (err) {
             console.error(err);

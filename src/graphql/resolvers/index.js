@@ -1,14 +1,10 @@
 import UserResolvers from './user.resolvers';
-import UserResolvers from './tenant.resolvers';
+import TenantResolvers from './tenant.resolvers';
 
 const resolvers = {
-
-    User: {
-        fullname: UserResolvers.getFullname,
-    },
     Query: {
-        getUsers: UserResolvers.getUsers,
-        getUser: UserResolvers.getUser,
+        users: UserResolvers.getUsers,
+        user: UserResolvers.getUser,
     },
     Mutation: {
         addUser: UserResolvers.addUser,

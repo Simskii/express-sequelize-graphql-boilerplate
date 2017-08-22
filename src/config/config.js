@@ -19,12 +19,12 @@ const defaultConfig = {
 
 function envConfig(env) {
     switch (env) {
-    case 'test':
-        return testConfig;
-    case 'production':
-        return prodConfig;
-    default:
-        return devConfig;
+        case 'test':
+            return testConfig;
+        case 'production':
+            return prodConfig;
+        default:
+            return devConfig;
     }
 }
 

@@ -11,6 +11,7 @@ const sequelize = new Sequelize(`${CONFIG.SQL_URL}`, {
 const db = {
     User: sequelize.import('./user'),
     Tenant: sequelize.import('./tenant'),
+    LocalAuth: sequelize.import('./local-auth'),
 
 };
 

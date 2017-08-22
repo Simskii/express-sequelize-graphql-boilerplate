@@ -1,19 +1,27 @@
+import config from '../config/config'
+
 export default (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
+        username: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+        },
         firstname: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
         lastname: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
-        password: {
-            type: DataTypes.STRING
-        },
+
     });
 
     User.associate = (db) => {
-        User.hasOne(db.Tenant);
+        User.belongsTo(db.Tenant);
     };
+
 
     return User;
 };
