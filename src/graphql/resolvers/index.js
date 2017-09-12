@@ -3,13 +3,15 @@ import TenantResolvers from './tenant.resolvers';
 
 const resolvers = {
     Query: {
-        users: UserResolvers.getUsers,
-        user: UserResolvers.getUser,
+        getUsers: UserResolvers.getUsers,
+        getUser: UserResolvers.getUser,
     },
     Mutation: {
         addUser: UserResolvers.addUser,
         updateUser: UserResolvers.updateUser,
         deleteUser: UserResolvers.deleteUser,
+
+        login: UserResolvers.login,
     },
 };
 

@@ -1,9 +1,18 @@
 export default `
+  type Auth {
+    token: String!
+  }
+  type Status {
+    message: String!
+  }
+
   type User {
     id: ID!
     firstname: String
     lastname: String
     fullname: String
+    email: String
+    phone: String
     createdAt: String
     updatedAt: String
   }
@@ -16,10 +25,8 @@ export default `
   }
 
   type Query {
-    user(id: ID!): User
-    users: [User]
-    tenant(id: ID!): Tenant
-    tenants: [Tenant]
+    getUser(id: ID!): User
+    getUsers: [User]
   }
 
   type Mutation {
@@ -27,6 +34,7 @@ export default `
     updateUser(firstname: String, lastname: String): User
     deleteUser(id: String!): User
 
+    login(email: String!, password: String!): Auth
   }
 
   schema {

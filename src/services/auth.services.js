@@ -1,58 +1,39 @@
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
-import {
-    Strategy as JWTStrategy,
-    ExtractJwt,
-} from 'passport-jwt';
-
 import config from '../config/config';
 import db from '../models';
 
-const localOpts = {
-    usernameField: 'email',
-};
-
-const localStrategy = new LocalStrategy(localOpts, async (email, password, done) => {
-    try {
-        const user = await db.LocalAuth.findOne({
-            where: {
-                email
-            }
-        });
-        if (!user) {
-            return done(null, false);
-        } else if (!user.authenticate(password)) {
-            return done(null, false);
-        }
-        return done(null, user);
-    } catch (e) {
-        return done(e, false);
+export function decodeToken(token) {
+    const arr = token.split(' ');
+    if (arr[0] === 'JWT' || 'jwt') {
+        return jwt.verify(arr[1], constants.JWT_SECRET);
     }
-});
+}
 
-const jwtOpts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.JWT_SECRET,
-};
-
-const jwtStrategy = new JWTStrategy(jwtOpts, async (payload, done) => {
-    try {
-        const user = await db.User.findById(payload.id);
-        if (!user) {
-            return done(null, false);
-        }
-        return done(null, user);
-    } catch (e) {
-        return done(e, false);
+export async function requireAuth(user) {
+    if (!user || !user.id) {
+        throw new Error('Unauthorized');
     }
-});
 
-passport.use(localStrategy);
-passport.use(jwtStrategy);
+    const me = await db.User.findById(user.id);
 
-export const authLocal = passport.authenticate('local', {
-    session: false,
-});
-export const authJwt = passport.authenticate('jwt', {
-    session: false,
-});
+    if (!me) {
+        throw new Error('Unauthorized!');
+    }
+
+    return me;
+}
+
+export async function userMiddleware(req, res, next) {
+    try {
+        const token = req.headers.authorization;
+
+        if (token != null) {
+            const user = await decodeToken(token);
+            req.user = user;
+        } else {
+            req.user = null;
+        }
+        return next();
+    } catch (error) {
+        throw error;
+    }
+}

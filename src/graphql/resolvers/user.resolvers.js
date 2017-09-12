@@ -1,4 +1,20 @@
 export default {
+    login: async (_, { email, password }, { db }) => {
+        try {
+            const user = await db.User.findOne({ email });
+            if (!user) {
+                throw new Error('User does not exist');
+            }
+            if (!user.authenticateUser(password)) {
+                throw new Error('Password is incorrect');
+            }
+            return {
+                token: user.createToken(),
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
     getUsers: async (_, args, { db }) => {
         try {
             return db.User.findAll({});
