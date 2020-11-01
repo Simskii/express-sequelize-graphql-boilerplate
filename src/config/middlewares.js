@@ -9,8 +9,8 @@ import jwt from 'jsonwebtoken';
 
 import config from './config';
 
-const isDev = process.env.NODE_ENV = 'development';
-const isProd = process.env.NODE_ENV = 'production';
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production';
 
 export default app => {
     if (isProd) {
